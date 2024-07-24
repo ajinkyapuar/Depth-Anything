@@ -32,7 +32,7 @@ def depth_image():
         image_array = np.frombuffer(image_stream, dtype=np.uint8)
         original_image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
         original_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
-        print(original_image.shape)
+        # print(original_image.shape)
 
         image = original_image.copy() / 255.0
     
@@ -49,16 +49,16 @@ def depth_image():
         depth = (depth - depth.min()) / (depth.max() - depth.min()) * 255.0
         
         depth = depth.cpu().numpy().astype(np.uint8)
-        depth_color = cv2.applyColorMap(depth, cv2.COLORMAP_INFERNO)
+        # depth_color = cv2.applyColorMap(depth, cv2.COLORMAP_INFERNO)
 
-        cv2.imwrite("test.png", depth_color)
+        # cv2.imwrite("test.png", depth_color)
 
-        # Convert the color mask image to a base64-encoded string
-        depth_color_base64 = image_to_base64(depth_color)
+        # # Convert the color mask image to a base64-encoded string
+        # depth_color_base64 = image_to_base64(depth_color)
 
         # Process segmentation results as needed
 
-        return jsonify({"result": "Segmentation successful", "color_mask_base64": depth_color_base64})
+        return jsonify({"result": "Depth successful", "depth": depth.tolist()})
     except Exception as e:
         return jsonify({"error": str(e)})
 
@@ -86,4 +86,4 @@ if __name__ == '__main__':
     ])
 
 
-    app.run(debug=True)
+    app.run(debug=True, port=6000)
